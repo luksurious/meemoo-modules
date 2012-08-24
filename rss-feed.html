@@ -5,7 +5,7 @@
   <title>Rss Feed Loader</title>
   <meta name="author" content="luksurious">
   <meta name="description" content="load the title of an rss feed entry" />
-  <script type='text/javascript' src="http://meemoo.org/meemoo/v1/meemoo.js"></script>
+  <script type='text/javascript' src="http://meemoo.org/meemoo/v1/meemoo-min.js"></script>
   <script type='text/javascript' src="http://www.google.com/jsapi"></script>
   <style type='text/css'>
     html, body {
@@ -23,6 +23,7 @@
   
 <script type='text/javascript'>
 
+(function(Meemoo) {
     var loaded =  false;
     var textElement = document.getElementById('text-preview');
     var urlElement = document.getElementById('rss-url');
@@ -41,8 +42,7 @@
     }
 
     var send = function(){
-		var text = textElement.value;
-        Meemoo.send("string", text);
+        Meemoo.send("string", textElement.value);
     }
     
     var loadRss = function() {
@@ -118,6 +118,7 @@
           type: "string"
         }
     });
+})(Meemoo);
 </script>
 </body>
 
