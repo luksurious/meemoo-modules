@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Rss Feed Loader</title>
+  
+  
+    
+    
+      <script type='text/javascript' src="http://meemoo.org/meemoo/v1/meemoo-min.js"></script>
+    
+  
+    
+    
+      <script type='text/javascript' src="http://www.google.com/jsapi"></script>
+    
+  
+  <style type='text/css'>
+        html, body {
+      margin: 0;
+      padding:0;
+      font-family: verdana;
+      font-size: 10px;
+    }
+  </style>
+  
+
+
+
+
+</head>
+<body>
+      <input type="text" id="rss-url"><br>
+    <a href="#" id="load-rss-link">load</a><br>
+    <textarea readonly="readonly" id="text-preview"></textarea>
+  
+<script type='text/javascript'>
+
+(function(Meemoo) {
+    var loaded =  false;
+    var textElement = document.getElementById('text-preview');
+    var urlElement = document.getElementById('rss-url');
+    
+    var feedResult = null;
+    
+    document.getElementById('load-rss-link').onclick = function() {
+        loadRss();
+    };
+    
+    var initialize = function() {
+        google.load("feeds", "1");
+        google.setOnLoadCallback(function() {
+            loaded = true;
+        });
+    }
+
+    var send = function(){
+        Meemoo.send("text", textElement);
+    }
+    
+    var loadRss = function() {
+        if (waitingForAPI()) {
+            return;
+        }
+        
+        var feed = new google.feeds.Feed(urlElement.value);
+
+        feed.load(function(result) {
+            if (!result.error) {
+                feedResult = result.feed;
+                randomize();
+            } else {
+                textElement.value = "Error loading Feed";
+            }
+        });
+    }
+    
+    var tries = 0;
+    var waitingForAPI = function() {
+        if (!loaded) {
+            if (tries > 10) {
+                textElement.value = "Waiting for Google Feed API to load timed out...";
+                return true;
+            }
+            
+            tries++;
+            setTimeout(function() {
+                loadRss();
+            }, 100);
+            return true;
+        }
+        
+        return false;
+    }
+    
+    var randomize = function() {
+        if (null === feedResult) {
+            textElement.value = "No feed loaded yet";
+            return;
+        }
+        
+        var index = Math.round(Math.random() * feedResult.entries.length);
+        
+        var entry = feedResult.entries[ index ];
+        
+        textElement.value = entry.title;
+    }
+
+    initialize();
+
+    Meemoo
+      .setInfo({
+        title: "rss-feed-reader",
+        author: "luksurious",
+        description: "reads a text line from an rss feed"
+      })
+      .addInputs({
+        send: {
+          action: send,
+          type: "bang",
+          description: "(re)sends the rss text"
+        },
+        randomize: {
+          action: randomize,
+          type: "bang",
+          description: "select a random sentence from the rss feed"
+        }
+      })
+    .addOutputs({
+        text: {
+          type: "text"
+        }
+    });
+})(Meemoo);
+</script>
+</body>
+
+
+</html>
+
