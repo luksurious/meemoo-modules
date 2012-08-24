@@ -3,34 +3,21 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>Rss Feed Loader</title>
-  
-  
-    
-    
-      <script type='text/javascript' src="http://meemoo.org/meemoo/v1/meemoo-min.js"></script>
-    
-  
-    
-    
-      <script type='text/javascript' src="http://www.google.com/jsapi"></script>
-    
-  
+  <meta name="author" content="luksurious">
+  <meta name="description" content="load the title of an rss feed entry" />
+  <script type='text/javascript' src="http://meemoo.org/meemoo/v1/meemoo-min.js"></script>
+  <script type='text/javascript' src="http://www.google.com/jsapi"></script>
   <style type='text/css'>
-        html, body {
+    html, body {
       margin: 0;
       padding:0;
       font-family: verdana;
       font-size: 10px;
     }
   </style>
-  
-
-
-
-
 </head>
 <body>
-      <input type="text" id="rss-url"><br>
+    <input type="text" id="rss-url"><br>
     <a href="#" id="load-rss-link">load</a><br>
     <textarea readonly="readonly" id="text-preview"></textarea>
   
@@ -55,7 +42,7 @@
     }
 
     var send = function(){
-        Meemoo.send("text", textElement);
+        Meemoo.send("string", textElement);
     }
     
     var loadRss = function() {
